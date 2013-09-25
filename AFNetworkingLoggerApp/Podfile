@@ -1,0 +1,7 @@
+pod 'AFNetworking', '~>1'
+pod 'JSONKit'
+
+target :AFNetworkingLoggerAppTests do
+  pod 'Kiwi'
+  pod 'OHHTTPStubs'
+end
