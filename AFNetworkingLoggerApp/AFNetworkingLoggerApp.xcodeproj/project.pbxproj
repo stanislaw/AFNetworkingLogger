@@ -29,7 +29,9 @@
 		86AE0EFA17F3BF420077503B /* AFHTTPRequestOperation+StartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EEF17F3B51B0077503B /* AFHTTPRequestOperation+StartDate.m */; };
 		86AE0EFB17F3BF420077503B /* AFNetworkingLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EE417F3AF000077503B /* AFNetworkingLogger.m */; };
 		86AE0EFD17F3BF460077503B /* AFNetworkingLogGenerators.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EF317F3BCBB0077503B /* AFNetworkingLogGenerators.m */; };
-		86CA2E3717F422F8006615F2 /* AFNetworkingLoggerLogGeneratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerLogGeneratorTests.m */; };
+		86CA2E3A17F42BBC006615F2 /* AFNetworkingLoggerVerboseLogGeneratorRealExamplesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CA2E3917F42BBC006615F2 /* AFNetworkingLoggerVerboseLogGeneratorRealExamplesTests.m */; };
+		86CA2E3B17F438AD006615F2 /* AFNetworkingLoggerLogGeneratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerLogGeneratorTests.m */; };
+		86CA2E3C17F438B0006615F2 /* AFNetworkingLoggerVerboseLogGeneratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8688B50017F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m */; };
 		E3FB4BBEE2734FB4927AB2BC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21E858AC4ED422E8CDFFD71 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +79,7 @@
 		86AE0EF117F3BC500077503B /* AFNetworkingLogger_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFNetworkingLogger_Private.h; sourceTree = "<group>"; };
 		86AE0EF217F3BCBB0077503B /* AFNetworkingLogGenerators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkingLogGenerators.h; sourceTree = "<group>"; };
 		86AE0EF317F3BCBB0077503B /* AFNetworkingLogGenerators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingLogGenerators.m; sourceTree = "<group>"; };
+		86CA2E3917F42BBC006615F2 /* AFNetworkingLoggerVerboseLogGeneratorRealExamplesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingLoggerVerboseLogGeneratorRealExamplesTests.m; sourceTree = "<group>"; };
 		885237BEA7FD4BD68A55E1E2 /* Pods-AFNetworkingLoggerAppTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworkingLoggerAppTests.xcconfig"; path = "Pods/Pods-AFNetworkingLoggerAppTests.xcconfig"; sourceTree = "<group>"; };
 		C2D2CD9237C345C88251A37A /* libPods-AFNetworkingLoggerAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworkingLoggerAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21E858AC4ED422E8CDFFD71 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +179,7 @@
 				8674172A17F3AD1F00B8BA45 /* Supporting Files */,
 				86AE0EE817F3AFBB0077503B /* TestHelpers.h */,
 				8688B50017F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m */,
+				86CA2E3917F42BBC006615F2 /* AFNetworkingLoggerVerboseLogGeneratorRealExamplesTests.m */,
 			);
 			path = AFNetworkingLoggerAppTests;
 			sourceTree = "<group>";
@@ -386,10 +390,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86CA2E3C17F438B0006615F2 /* AFNetworkingLoggerVerboseLogGeneratorTests.m in Sources */,
 				86AE0EFA17F3BF420077503B /* AFHTTPRequestOperation+StartDate.m in Sources */,
+				86CA2E3A17F42BBC006615F2 /* AFNetworkingLoggerVerboseLogGeneratorRealExamplesTests.m in Sources */,
+				86CA2E3B17F438AD006615F2 /* AFNetworkingLoggerLogGeneratorTests.m in Sources */,
 				86AE0EFB17F3BF420077503B /* AFNetworkingLogger.m in Sources */,
 				86AE0EF417F3BCBB0077503B /* AFNetworkingLogGenerators.m in Sources */,
-				86CA2E3717F422F8006615F2 /* AFNetworkingLoggerLogGeneratorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

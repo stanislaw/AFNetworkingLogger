@@ -35,7 +35,7 @@
 - (void)testExample {
     __block BOOL flag = NO;
 
-    NSDictionary *dictionary = @{ @"KEY": @"VALUE" };
+    NSDictionary *dictionary = @{ @"Response data key": @"Some data" };
 
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return YES;
@@ -62,7 +62,7 @@
 - (void)testExample2 {
     __block BOOL flag = NO;
 
-    NSDictionary *dictionary = @{ @"KEY": @"VALUE" };
+    NSDictionary *dictionary = @{ @"A key": @"A value" };
 
     NSDictionary *HTTPHeaders = @{
         @"Cache-Control"   : @"public, max-age=1800",
@@ -84,7 +84,7 @@
         return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:HTTPHeaders];
     }];
 
-    NSURL *url = [[NSURL alloc] initWithString:@"https://api.a-a-ah.ru/v1/places?bounds=55.689972,37.770996;55.702354,37.792969&fields=id,lat,lng,type_ru,name_ru,maincategory_id,is_current_user_like,is_current_user_wish&limit=100&order=rating&rating=20&with_photo=1"];
+    NSURL *url = [[NSURL alloc] initWithString:@"https://api.hosthosthost.com/v1/places?bounds=55.689972,37.770996;55.702354,37.792969&fields=id,lat,lng,type_ru,name_ru,maincategory_id,current_user_likes,is_current_user_wish&limit=100&order=rating&rating=20&with_photo=1"];
 
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
     urlRequest.HTTPBody = [dictionary JSONData];
@@ -173,7 +173,7 @@
     [urlRequest setValue:@"ru" forHTTPHeaderField: @"Accept-Language"];
     [urlRequest setHTTPMethod:@"POST"];
 
-    NSString *dataString = @"A data string";
+    NSString *dataString = @"A data string in a HTTP body";
     [urlRequest setHTTPBody:[dataString dataUsingEncoding:NSUTF8StringEncoding]];
 
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];

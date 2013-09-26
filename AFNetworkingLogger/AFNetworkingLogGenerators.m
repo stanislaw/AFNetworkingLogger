@@ -219,10 +219,11 @@
             [logComponents addObject:@"\n"];
         }
 
-        [logComponents addObject:requestSizeString];
-
-        [logComponents addObject:@"\n"];
-        [logComponents addObject:@"\n"];
+        if (requestSize > 0) {
+            [logComponents addObject:requestSizeString];
+            [logComponents addObject:@"\n"];
+            [logComponents addObject:@"\n"];
+        }
 
         log = [logComponents componentsJoinedByString:@""];
     }
@@ -344,13 +345,19 @@
 
         if (operation.responseData.length == 0) {
             responseBodyString = [responseBodyString stringByAppendingString:@"No response body."];
+        } else if (0 < operation.responseData.length && operation.responseData.length <= (1024 * 10)) {
+            responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%s", responseData.bytes]];
         } else if (operation.responseData.length <= (1024 * 100)) {
-            responseBodyString = [responseBodyString stringByAppendingString:[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]];
+            NSUInteger N = 300;
+            NSData *firstNBytesOfResponseData = [responseData subdataWithRange:NSMakeRange(0, N)];
+
+            responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%s ...TRUNCATED...", firstNBytesOfResponseData.bytes]];
         } else {
             responseBodyString = [responseBodyString stringByAppendingString:@"Response body data is too large to be displayed..."];
         }
 
 #pragma mark Aggregation of formatted log string
+
         NSMutableArray *logComponents = [NSMutableArray array];
 
         [logComponents addObject:@"\n"];

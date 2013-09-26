@@ -62,7 +62,7 @@
 - (void)testExample2 {
     __block BOOL flag = NO;
 
-    NSDictionary *dictionary = @{ @"KEY": @"VALUE" };
+    NSDictionary *dictionary = @{ @"A key": @"A value" };
 
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return YES;
@@ -70,7 +70,7 @@
         return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:nil];
     }];
 
-    NSURL *url = [[NSURL alloc] initWithString:@"https://api.a-a-ah.ru/v1/places?bounds=55.689972,37.770996;55.702354,37.792969&fields=id,lat,lng,type_ru,name_ru,maincategory_id,is_current_user_like,is_current_user_wish&limit=100&order=rating&rating=20&with_photo=1"];
+    NSURL *url = [[NSURL alloc] initWithString:@"https://api.hosthosthost.com/v1/places?bounds=55.689972,37.770996;55.702354,37.792969&fields=id,lat,lng,type_ru,name_ru,maincategory_id,current_user_likes,is_current_user_wish&limit=100&order=rating&rating=20&with_photo=1"];
 
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
     urlRequest.HTTPBody = [dictionary JSONData];
