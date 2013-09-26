@@ -15,7 +15,12 @@
 @implementation AFNetworkingLogGenerator
 
 - (NSString *)generateLogForRequestDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
-    NSString *log = [NSString stringWithFormat:@"%@ %@\n", operation.request.HTTPMethod, operation.request.URL.absoluteString];
+    NSDictionary *HTTPHeaders = operation.request.allHTTPHeaderFields;
+    NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
+                                                                         format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+    NSData *HTTPBodyData = operation.request.HTTPBody;
+
+    NSString *log = [NSString stringWithFormat:@"%@ %@, %@ bytes\n", operation.request.HTTPMethod, operation.request.URL.absoluteString, @(HTTPHeadersData.length + HTTPBodyData.length)];
 
     return log;
 }
@@ -25,7 +30,11 @@
     NSUInteger statusCode = operation.response.statusCode;
     NSString *requestURL = operation.request.URL.absoluteString;
     NSData *responseData = operation.responseData;
-    NSUInteger responseSize = responseData.length;
+
+    NSDictionary *HTTPHeaders = operation.response.allHeaderFields;
+    NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
+                                                                         format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+    NSNumber *responseSize = @(HTTPHeadersData.length + responseData.length);
 
     NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:objc_getAssociatedObject(operation, AFNLHTTPRequestOperationStartDate)];
     NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
@@ -36,12 +45,14 @@
 
     NSString *elapsedTimeString = [numberFormatter stringFromNumber:@(elapsedTime)];
 
+    NSString *log = @"";
+    if (operation.error == nil) {
+        NSString *logFormat = @("%@ %u %@, %@ bytes in %@s\n");
 
-    // PATCH 200 https://api.a-a-ah.ru/v1/places?... 567 bytes in 234 ms
-
-    NSString *logFormat = @("%@ %u %@, %u bytes in %@s\n");
-
-    NSString *log = [NSString stringWithFormat:logFormat, HTTPMethod, statusCode, requestURL, responseSize, elapsedTimeString];
+        log = [NSString stringWithFormat:logFormat, HTTPMethod, statusCode, requestURL, responseSize, elapsedTimeString];
+    } else {
+        // TODO
+    }
 
     return log;
 }
