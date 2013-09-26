@@ -20,8 +20,6 @@
 - (void)setUp {
     [super setUp];
 
-    printf("\n\n");
-
     AFNetworkingLogger.sharedLogger.level = AFLoggerLevelNormal;
     [AFNetworkingLogger.sharedLogger startLogging];
 }
@@ -31,8 +29,6 @@
     [super tearDown];
 
     [OHHTTPStubs removeAllStubs];
-
-    printf("\n\n");
 }
 
 - (void)testExample {

@@ -7,6 +7,7 @@
 //
 
 #import "AFNetworkingLogGenerators.h"
+#import "AFNetworkingLoggerConstants.h"
 
 #import "NSURL+QueryComponents.h"
 
@@ -62,119 +63,154 @@
 @implementation AFNetworkingVerboseLogGenerator
 
 - (NSString *)generateLogForResponseDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
+    NSString *log = [NSString string];
+
+    @autoreleasepool {
 
 #pragma mark AFHTTPRequestOperation components
 
-    NSString *HTTPMethod = operation.request.HTTPMethod;
-    NSUInteger statusCode = operation.response.statusCode;
-    NSData *responseData = operation.responseData;
-    NSDictionary *HTTPHeaders = operation.response.allHeaderFields;
-    NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
-                                                                         format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        NSString *HTTPMethod = operation.request.HTTPMethod;
+        NSUInteger statusCode = operation.response.statusCode;
+        NSData *responseData = operation.responseData;
+        NSDictionary *HTTPHeaders = operation.response.allHeaderFields;
+        NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
+                                                                             format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
 
 #pragma mark Paddings
 
-    NSString *paddingString = [NSString stringWithFormat:@"%@ %@ ", HTTPMethod, @(statusCode)];
-    paddingString = [@"" stringByPaddingToLength:paddingString.length withString:@" " startingAtIndex:0];
-    NSString *responseSizePaddingString = [@"" stringByPaddingToLength:(paddingString.length - 3) withString:@" " startingAtIndex:0];
+        NSString *paddingString = [NSString stringWithFormat:@"%@ %@ ", HTTPMethod, @(statusCode)];
+        paddingString = [@"" stringByPaddingToLength:paddingString.length withString:@" " startingAtIndex:0];
+        NSString *responseSizePaddingString = [@"" stringByPaddingToLength:(paddingString.length - 3) withString:@" " startingAtIndex:0];
+
+#pragma mark NSURLError 
+
+        // *** Cocoa NSURLError: NSURLErrorCannotFindHost -1003 ***
+        NSString *NSURLErrorWarningString;
+
+        if (operation.error) {
+            NSString *NSURLErrorCodeString = [AFNL_NSURLErrorCodes() objectForKey:@(operation.error.code)];
+            NSURLErrorWarningString = [NSString stringWithFormat:@("*** Cocoa NSURLError: %@ %@ ***"), NSURLErrorCodeString, @(operation.error.code)];
+        }
 
 #pragma mark Header string (HTTP method, status code, URL)
 
-    NSString *URLStringWithoutQueryPart = [[operation.request.URL.absoluteString componentsSeparatedByString:@"?"] objectAtIndex:0];
-    NSString *headerString = [NSString stringWithFormat:@("%@ %@ %@"), HTTPMethod, @(statusCode), URLStringWithoutQueryPart];
+        NSArray *URLComponents = [operation.request.URL.absoluteString componentsSeparatedByString:@"?"];
+        BOOL queryComponentsPresent = URLComponents.count == 2;
 
-    NSDictionary *queryComponents = operation.request.URL.queryComponents;
-    NSMutableArray *queryComponentsStrings = [NSMutableArray array];
-    [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
-        NSString *queryValueString = [queryValue lastObject];
+        NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
+        NSString *headerString = [NSString stringWithFormat:@("%@ %@ %@"), HTTPMethod, @(statusCode), URLStringWithoutQueryPart];
 
-        NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
+        if (queryComponentsPresent) {
+            headerString = [headerString stringByAppendingString:@"?"];
+        }
 
-        [queryComponentsStrings addObject:queryComponentString];
-    }];
-    NSString *queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
+        NSDictionary *queryComponents = operation.request.URL.queryComponents;
+        NSMutableArray *queryComponentsStrings = [NSMutableArray array];
+        [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
+            NSString *queryValueString = [queryValue lastObject];
+
+            NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
+
+            if ([queryComponents.allKeys indexOfObject:queryKey] != (queryComponents.count - 1)) {
+                queryComponentString = [queryComponentString stringByAppendingString:@"&"];
+            }
+
+            [queryComponentsStrings addObject:queryComponentString];
+        }];
+        NSString *queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
 
 #pragma mark Response size and elapsed time
 
-    NSNumber *responseSize = @(HTTPHeadersData.length + responseData.length);
+        NSNumber *responseSize = @(HTTPHeadersData.length + responseData.length);
 
-    NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:objc_getAssociatedObject(operation, AFNLHTTPRequestOperationStartDate)];
-    NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
-    numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-    numberFormatter.minimumFractionDigits = 0;
-    numberFormatter.maximumFractionDigits = 3;
-    numberFormatter.minimumIntegerDigits = 1;
+        NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:objc_getAssociatedObject(operation, AFNLHTTPRequestOperationStartDate)];
+        NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
+        numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        numberFormatter.minimumFractionDigits = 0;
+        numberFormatter.maximumFractionDigits = 3;
+        numberFormatter.minimumIntegerDigits = 1;
 
-    NSString *elapsedTimeString = [numberFormatter stringFromNumber:@(elapsedTime)];
+        NSString *elapsedTimeString = [numberFormatter stringFromNumber:@(elapsedTime)];
 
-    NSString *responseSizeAndElapsedTimeString = [NSString stringWithFormat:@"%@-> %@ bytes in %@s", responseSizePaddingString, responseSize, elapsedTimeString];
+        NSString *responseSizeAndElapsedTimeString = [NSString stringWithFormat:@"%@-> %@ bytes in %@s", responseSizePaddingString, responseSize, elapsedTimeString];
 
 #pragma mark HTTP headers
-    NSMutableArray *HTTPHeadersStrings = [NSMutableArray array];
+        NSString *HTTPHeadersString;
 
-    __block NSUInteger calculatedHTTPHeadersPadding = 0;
-    [HTTPHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-         calculatedHTTPHeadersPadding = MAX(calculatedHTTPHeadersPadding, [key length]);
-    }];
+        if (HTTPHeaders) {
+            NSMutableArray *HTTPHeadersStrings = [NSMutableArray array];
 
-    [HTTPHeaders enumerateKeysAndObjectsUsingBlock:^(id HTTPHeaderKey, id HTTPHeaderKeyValue, BOOL *stop) {
-        NSString *HTTPHeaderKeyString = [HTTPHeaderKey stringByPaddingToLength:calculatedHTTPHeadersPadding withString:@" " startingAtIndex:0];
-        NSString *HTTPHeaderString = [NSString stringWithFormat:@"%@%@ = %@", paddingString, HTTPHeaderKeyString, HTTPHeaderKeyValue];
-        [HTTPHeadersStrings addObject:HTTPHeaderString];
-    }];
+            __block NSUInteger calculatedHTTPHeadersPadding = 0;
+            [HTTPHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                 calculatedHTTPHeadersPadding = MAX(calculatedHTTPHeadersPadding, [key length]);
+            }];
 
-    NSString *HTTPHeadersString = [HTTPHeadersStrings componentsJoinedByString:@"\n"];
+            [HTTPHeaders enumerateKeysAndObjectsUsingBlock:^(id HTTPHeaderKey, id HTTPHeaderKeyValue, BOOL *stop) {
+                NSString *HTTPHeaderKeyString = [HTTPHeaderKey stringByPaddingToLength:calculatedHTTPHeadersPadding withString:@" " startingAtIndex:0];
+                NSString *HTTPHeaderString = [NSString stringWithFormat:@"%@%@ = %@", paddingString, HTTPHeaderKeyString, HTTPHeaderKeyValue];
+                [HTTPHeadersStrings addObject:HTTPHeaderString];
+            }];
+
+            HTTPHeadersString = [HTTPHeadersStrings componentsJoinedByString:@"\n"];
+        }
 
 #pragma mark HTTP response body
 
-    NSString *responseBodyString = [paddingString copy];
+        NSString *responseBodyString = [paddingString copy];
 
-    if (operation.responseData.length == 0) {
-        responseBodyString = [responseBodyString stringByAppendingString:@"Response body is empty"];
-    } else if (operation.responseData.length <= (1024 * 100)) {
-        responseBodyString = [responseBodyString stringByAppendingString:[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]];
-    } else {
-        responseBodyString = [responseBodyString stringByAppendingString:@"Response body data is too large"];
-    }
+        if (operation.responseData.length == 0) {
+            responseBodyString = [responseBodyString stringByAppendingString:@"No response body"];
+        } else if (operation.responseData.length <= (1024 * 100)) {
+            responseBodyString = [responseBodyString stringByAppendingString:[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]];
+        } else {
+            responseBodyString = [responseBodyString stringByAppendingString:@"Response body data is too large"];
+        }
 
 #pragma mark Aggregation of formatted log string
 
-    NSMutableArray *logComponents = [NSMutableArray array];
+        NSMutableArray *logComponents = [NSMutableArray array];
 
-    [logComponents addObject:@"\n"];
+        [logComponents addObject:@"\n"];
 
-    [logComponents addObject:headerString];
-    [logComponents addObject:@"\n"];
+        if (operation.error) {
+            [logComponents addObject:NSURLErrorWarningString];
+            [logComponents addObject:@"\n"];
+        }
 
-    [logComponents addObject:queryComponentsString];
+        [logComponents addObject:headerString];
+        [logComponents addObject:@"\n"];
 
-    [logComponents addObject:@"\n"];
-    [logComponents addObject:@"\n"];
+        if (queryComponentsPresent) {
+            [logComponents addObject:queryComponentsString];
+            [logComponents addObject:@"\n"];
+        }
 
-    [logComponents addObject:responseSizeAndElapsedTimeString];
+//        [logComponents addObject:@"\n"];
 
-    [logComponents addObject:@"\n"];
-    [logComponents addObject:@"\n"];
+        [logComponents addObject:responseSizeAndElapsedTimeString];
 
-    [logComponents addObject:HTTPHeadersString];
+        [logComponents addObject:@"\n"];
 
-    [logComponents addObject:@"\n"];
-    [logComponents addObject:@"\n"];
+        if (HTTPHeaders) {
+            [logComponents addObject:@"\n"];
+            [logComponents addObject:HTTPHeadersString];
+            [logComponents addObject:@"\n"];
+        }
 
-    [logComponents addObject:responseBodyString];
+        [logComponents addObject:@"\n"];
 
-    [logComponents addObject:@"\n"];
+        [logComponents addObject:responseBodyString];
 
-    NSString *log = @"";
-    if (operation.error == nil) {
+        [logComponents addObject:@"\n"];
 
-        // log = [NSString stringWithFormat:logFormat, HTTPMethod, statusCode, requestURL, responseSize, elapsedTimeString];
+        // if (operation.error == nil) {
+            log = [logComponents componentsJoinedByString:@""];
+        // } else {
+            // TODO
+        // }
 
-        log = [logComponents componentsJoinedByString:@""];
-    } else {
-        // TODO
     }
-    
+
     return log;
 }
 
