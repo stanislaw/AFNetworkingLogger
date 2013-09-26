@@ -21,13 +21,12 @@ or you can just clone AFNetworkingLogger repository using git clone and copy the
 
 ## Usage
 
-You need to start AFNetworkingLogger somewhere. For example, your app's
-delegate is a good place to do this:
+You need to start AFNetworkingLogger somewhere. For example, your app's delegate is a good place to do this:
 
 ```objective-c
 #import <AFNetworkingLogger.h>
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
     AFNetworkingLogger.sharedLogger.level = AFNetworkingLoggerLevelVerbose;
     [AFNetworkingLogger.sharedLogger startLogging];
@@ -35,4 +34,22 @@ delegate is a good place to do this:
     return YES;
 }
 ```
+
+## TODO
+
+...
+
+## Credits
+
+AFNetworkingLogger was created by Stanislaw Pankevich.
+
+Thanks to Marina Balioura (@mettta) for her amazing contribution to the design of AFNetworkingLogger console-text output format: rigorous, clear, informative.
+ 
+`AFNetworkingLogger` is a plugin for [AFNetworking](https://github.com/AFNetworking/AFNetworking) library created by [Mattt Thompson](http://github.com/mattt).
+
+AFNetworkingLogger is inspired by the design of the similar `AFNetworking` plugin [AFHTTPRequestOperationLogger](https://github.com/AFNetworking/AFHTTPRequestOperationLogger), that was as well created by [Mattt Thompson](http://github.com/mattt).
+
+## Copyright
+
+Not yet.
 
