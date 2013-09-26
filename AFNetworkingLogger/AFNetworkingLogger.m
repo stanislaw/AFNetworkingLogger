@@ -47,7 +47,7 @@
         return nil;
     }
     
-    self.level = AFLoggerLevelNormal;
+    self.level = AFNetworkingLoggerLevelNormal;
     
     return self;
 }
@@ -67,11 +67,11 @@
 - (id <AFNetworkingLogGenerator>)logGenerator {
     if (_logGenerator == nil) {
         switch (self.level) {
-            case AFLoggerLevelOff:
+            case AFNetworkingLoggerLevelOff:
                 _logGenerator = nil;
 
                 break;
-            case AFLoggerLevelVerbose:
+            case AFNetworkingLoggerLevelVerbose:
                 _logGenerator = [[AFNetworkingVerboseLogGenerator alloc] init];
 
                 break;
@@ -112,7 +112,7 @@
         return;
     }
 
-    if (self.level != AFLoggerLevelOff) {
+    if (self.level != AFNetworkingLoggerLevelOff) {
         NSString *log = [self.logGenerator generateLogForRequestDataOfAFHTTPRequestOperation:operation];
         printf("%s", log.UTF8String);
     }
@@ -129,7 +129,7 @@
         return;
     }
 
-    if (self.level != AFLoggerLevelOff) {
+    if (self.level != AFNetworkingLoggerLevelOff) {
         NSString *log = [self.logGenerator generateLogForResponseDataOfAFHTTPRequestOperation:operation];
         printf("%s", log.UTF8String);
     }

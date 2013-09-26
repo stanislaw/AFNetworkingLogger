@@ -23,9 +23,9 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, AFNetworkingLoggerLevel) {
-  AFLoggerLevelOff = 0,
-  AFLoggerLevelNormal,
-  AFLoggerLevelVerbose,
+  AFNetworkingLoggerLevelOff = 0,
+  AFNetworkingLoggerLevelNormal,
+  AFNetworkingLoggerLevelVerbose,
 };
 
 @interface AFNetworkingLogger : NSObject

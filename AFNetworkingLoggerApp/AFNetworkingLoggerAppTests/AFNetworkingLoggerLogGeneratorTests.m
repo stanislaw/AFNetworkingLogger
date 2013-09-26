@@ -20,7 +20,7 @@
 - (void)setUp {
     [super setUp];
 
-    AFNetworkingLogger.sharedLogger.level = AFLoggerLevelNormal;
+    AFNetworkingLogger.sharedLogger.level = AFNetworkingLoggerLevelNormal;
     [AFNetworkingLogger.sharedLogger startLogging];
 }
 
