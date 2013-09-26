@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, AFNetworkingLoggerLevel) {
-  AFLoggerLevelOff,
+  AFLoggerLevelOff = 0,
   AFLoggerLevelNormal,
   AFLoggerLevelVerbose,
 };

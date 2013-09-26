@@ -12,15 +12,17 @@
 #import <AFNetworking/AFNetworking.h>
 #import "AFNetworkingLogger.h"
 
-@interface AFNetworkingLoggerAppTests : XCTestCase
-
+@interface AFNetworkingLoggerLogGeneratorTests : XCTestCase
 @end
 
-@implementation AFNetworkingLoggerAppTests
+@implementation AFNetworkingLoggerLogGeneratorTests
 
 - (void)setUp {
     [super setUp];
 
+    printf("\n\n");
+
+    AFNetworkingLogger.sharedLogger.level = AFLoggerLevelNormal;
     [AFNetworkingLogger.sharedLogger startLogging];
 }
 
@@ -29,6 +31,8 @@
     [super tearDown];
 
     [OHHTTPStubs removeAllStubs];
+
+    printf("\n\n");
 }
 
 - (void)testExample {

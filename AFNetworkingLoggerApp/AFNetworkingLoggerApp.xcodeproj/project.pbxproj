@@ -22,8 +22,8 @@
 		8674172517F3AD1F00B8BA45 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8674170117F3AD1F00B8BA45 /* Foundation.framework */; };
 		8674172617F3AD1F00B8BA45 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8674170517F3AD1F00B8BA45 /* UIKit.framework */; };
 		8674172E17F3AD1F00B8BA45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8674172C17F3AD1F00B8BA45 /* InfoPlist.strings */; };
-		8674173017F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests.m */; };
 		8688B4FF17F3C2EA008C188D /* NSURL+QueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 8688B4FE17F3C2EA008C188D /* NSURL+QueryComponents.m */; };
+		8688B50117F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8688B50017F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m */; };
 		86AE0EF417F3BCBB0077503B /* AFNetworkingLogGenerators.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EF317F3BCBB0077503B /* AFNetworkingLogGenerators.m */; };
 		86AE0EF717F3BF410077503B /* AFHTTPRequestOperation+StartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EEF17F3B51B0077503B /* AFHTTPRequestOperation+StartDate.m */; };
 		86AE0EF817F3BF410077503B /* AFNetworkingLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EE417F3AF000077503B /* AFNetworkingLogger.m */; };
@@ -64,9 +64,10 @@
 		8674172317F3AD1F00B8BA45 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		8674172B17F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AFNetworkingLoggerAppTests-Info.plist"; sourceTree = "<group>"; };
 		8674172D17F3AD1F00B8BA45 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingLoggerAppTests.m; sourceTree = "<group>"; };
+		8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerLogGeneratorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingLoggerLogGeneratorTests.m; sourceTree = "<group>"; };
 		8688B4FD17F3C2EA008C188D /* NSURL+QueryComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+QueryComponents.h"; sourceTree = "<group>"; };
 		8688B4FE17F3C2EA008C188D /* NSURL+QueryComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+QueryComponents.m"; sourceTree = "<group>"; };
+		8688B50017F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingLoggerVerboseLogGeneratorTests.m; sourceTree = "<group>"; };
 		86AE0EE317F3AF000077503B /* AFNetworkingLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkingLogger.h; sourceTree = "<group>"; };
 		86AE0EE417F3AF000077503B /* AFNetworkingLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingLogger.m; sourceTree = "<group>"; };
 		86AE0EE817F3AFBB0077503B /* TestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestHelpers.h; sourceTree = "<group>"; };
@@ -171,9 +172,10 @@
 		8674172917F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests.m */,
+				8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerLogGeneratorTests.m */,
 				8674172A17F3AD1F00B8BA45 /* Supporting Files */,
 				86AE0EE817F3AFBB0077503B /* TestHelpers.h */,
+				8688B50017F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m */,
 			);
 			path = AFNetworkingLoggerAppTests;
 			sourceTree = "<group>";
@@ -385,7 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				86AE0EFA17F3BF420077503B /* AFHTTPRequestOperation+StartDate.m in Sources */,
-				8674173017F3AD1F00B8BA45 /* AFNetworkingLoggerAppTests.m in Sources */,
+				8688B50117F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m in Sources */,
 				86AE0EFB17F3BF420077503B /* AFNetworkingLogger.m in Sources */,
 				86AE0EF417F3BCBB0077503B /* AFNetworkingLogGenerators.m in Sources */,
 			);
