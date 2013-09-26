@@ -111,12 +111,7 @@
     if (self.filterPredicate && [self.filterPredicate evaluateWithObject:operation]) {
         return;
     }
-    
-    NSString *body = nil;
-    if ([operation.request HTTPBody]) {
-        body = [[NSString alloc] initWithData:[operation.request HTTPBody] encoding:NSUTF8StringEncoding];
-    }
-    
+
     if (self.level != AFLoggerLevelOff) {
         NSString *log = [self.logGenerator generateLogForRequestDataOfAFHTTPRequestOperation:operation];
         printf("%s", log.UTF8String);
@@ -135,7 +130,7 @@
     }
 
     if (self.level != AFLoggerLevelOff) {
-        NSString *log = [self.logGenerator generateLogForRequestDataOfAFHTTPRequestOperation:operation];
+        NSString *log = [self.logGenerator generateLogForResponseDataOfAFHTTPRequestOperation:operation];
         printf("%s", log.UTF8String);
     }
 }

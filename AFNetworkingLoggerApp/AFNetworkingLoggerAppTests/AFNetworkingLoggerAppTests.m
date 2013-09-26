@@ -30,28 +30,33 @@
 }
 
 - (void)testExample {
+    __block BOOL flag = NO;
+
     NSDictionary *dictionary = @{ @"KEY": @"VALUE" };
 
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return YES;
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 responseTime:0 headers:nil];
+        return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 responseTime:0.2 headers:nil];
     }];
 
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"www.foo.bar"]];
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar"]];
     urlRequest.HTTPBody = [dictionary JSONData];
 
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
     [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Received data: %@", [operation.responseData objectFromJSONData]);
 
+        flag = YES;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         abort();
     }];
 
     [requestOperation start];
 
-    runLoopIfNeeded();
+    while(flag == NO) {
+        runLoopIfNeeded();
+    }
 }
 
 @end
