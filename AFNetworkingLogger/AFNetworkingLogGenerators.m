@@ -95,30 +95,39 @@
 
 #pragma mark Header string (HTTP method, status code, URL)
 
-        NSArray *URLComponents = [operation.request.URL.absoluteString componentsSeparatedByString:@"?"];
-        BOOL queryComponentsPresent = URLComponents.count == 2;
+        NSString *headerString;
 
-        NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
-        NSString *headerString = [NSString stringWithFormat:@("%@ %@"), HTTPMethod, URLStringWithoutQueryPart];
+        BOOL queryComponentsPresent = NO;
+        NSString *queryComponentsString;
 
-        if (queryComponentsPresent) {
-            headerString = [headerString stringByAppendingString:@"?"];
-        }
+        if (operation.request.URL.absoluteString.length > 56) {
+            NSArray *URLComponents = [operation.request.URL.absoluteString componentsSeparatedByString:@"?"];
+            queryComponentsPresent = URLComponents.count == 2;
 
-        NSDictionary *queryComponents = operation.request.URL.queryComponents;
-        NSMutableArray *queryComponentsStrings = [NSMutableArray array];
-        [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
-            NSString *queryValueString = [queryValue lastObject];
+            NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
+            headerString = [NSString stringWithFormat:@("%@ %@"), HTTPMethod, URLStringWithoutQueryPart];
 
-            NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
-
-            if ([queryComponents.allKeys indexOfObject:queryKey] != (queryComponents.count - 1)) {
-                queryComponentString = [queryComponentString stringByAppendingString:@"&"];
+            if (queryComponentsPresent) {
+                headerString = [headerString stringByAppendingString:@"?"];
             }
 
-            [queryComponentsStrings addObject:queryComponentString];
-        }];
-        NSString *queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
+            NSDictionary *queryComponents = operation.request.URL.queryComponents;
+            NSMutableArray *queryComponentsStrings = [NSMutableArray array];
+            [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
+                NSString *queryValueString = [queryValue lastObject];
+
+                NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
+
+                if ([queryComponents.allKeys indexOfObject:queryKey] != (queryComponents.count - 1)) {
+                    queryComponentString = [queryComponentString stringByAppendingString:@"&"];
+                }
+
+                [queryComponentsStrings addObject:queryComponentString];
+            }];
+            queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
+        } else {
+            headerString = [NSString stringWithFormat:@("%@ %@"), HTTPMethod, operation.request.URL.absoluteString];
+        }
 
 #pragma mark Request size
 
@@ -240,30 +249,39 @@
 
 #pragma mark Header string (HTTP method, status code, URL)
 
-        NSArray *URLComponents = [operation.request.URL.absoluteString componentsSeparatedByString:@"?"];
-        BOOL queryComponentsPresent = URLComponents.count == 2;
+        NSString *headerString;
 
-        NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
-        NSString *headerString = [NSString stringWithFormat:@("%@ %@"), statusCodeString, URLStringWithoutQueryPart];
+        BOOL queryComponentsPresent = NO;
+        NSString *queryComponentsString;
 
-        if (queryComponentsPresent) {
-            headerString = [headerString stringByAppendingString:@"?"];
-        }
+        if (operation.request.URL.absoluteString.length > 56) {
+            NSArray *URLComponents = [operation.request.URL.absoluteString componentsSeparatedByString:@"?"];
+            queryComponentsPresent = URLComponents.count == 2;
 
-        NSDictionary *queryComponents = operation.request.URL.queryComponents;
-        NSMutableArray *queryComponentsStrings = [NSMutableArray array];
-        [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
-            NSString *queryValueString = [queryValue lastObject];
+            NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
+            headerString = [NSString stringWithFormat:@("%@ %@"), statusCodeString, URLStringWithoutQueryPart];
 
-            NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
-
-            if ([queryComponents.allKeys indexOfObject:queryKey] != (queryComponents.count - 1)) {
-                queryComponentString = [queryComponentString stringByAppendingString:@"&"];
+            if (queryComponentsPresent) {
+                headerString = [headerString stringByAppendingString:@"?"];
             }
 
-            [queryComponentsStrings addObject:queryComponentString];
-        }];
-        NSString *queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
+            NSDictionary *queryComponents = operation.request.URL.queryComponents;
+            NSMutableArray *queryComponentsStrings = [NSMutableArray array];
+            [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
+                NSString *queryValueString = [queryValue lastObject];
+
+                NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
+
+                if ([queryComponents.allKeys indexOfObject:queryKey] != (queryComponents.count - 1)) {
+                    queryComponentString = [queryComponentString stringByAppendingString:@"&"];
+                }
+
+                [queryComponentsStrings addObject:queryComponentString];
+            }];
+            queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
+        } else {
+            headerString = [NSString stringWithFormat:@("%@ %@"), statusCodeString, operation.request.URL.absoluteString];
+        }
 
 #pragma mark Response size and elapsed time
 
@@ -313,7 +331,6 @@
         }
 
 #pragma mark Aggregation of formatted log string
-
         NSMutableArray *logComponents = [NSMutableArray array];
 
         [logComponents addObject:@"\n"];
@@ -351,7 +368,6 @@
 
         [logComponents addObject:@"\n"];
         [logComponents addObject:@"\n"];
-
 
         log = [logComponents componentsJoinedByString:@""];
     }
