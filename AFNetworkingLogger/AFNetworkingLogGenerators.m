@@ -17,25 +17,44 @@
 
 - (NSString *)generateLogForRequestDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
     NSDictionary *HTTPHeaders = operation.request.allHTTPHeaderFields;
-    NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
-                                                                         format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
-    NSData *HTTPBodyData = operation.request.HTTPBody;
+    NSUInteger HTTPHeadersSize = 0;
 
-    NSString *log = [NSString stringWithFormat:@"%@ %@, %@ bytes\n", operation.request.HTTPMethod, operation.request.URL.absoluteString, @(HTTPHeadersData.length + HTTPBodyData.length)];
+    if (HTTPHeaders) {
+        NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        HTTPHeadersSize = HTTPHeadersData.length;
+    }
+
+    NSData *HTTPBodyData = operation.request.HTTPBody;
+    NSUInteger HTTPBodySize = HTTPBodyData ? HTTPBodyData.length : 0;
+
+    NSString *log = [NSString stringWithFormat:@"%@ %@, %@ bytes\n", operation.request.HTTPMethod, operation.request.URL.absoluteString, @(HTTPHeadersSize + HTTPBodySize)];
 
     return log;
 }
 
 - (NSString *)generateLogForResponseDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
-    NSString *HTTPMethod = operation.request.HTTPMethod;
+    NSString *statusCodeString;
     NSUInteger statusCode = operation.response.statusCode;
+    if (100 <= statusCode && statusCode < 600) {
+        statusCodeString = [@(statusCode) stringValue];
+    } else {
+        statusCodeString = @"N/A";
+    }
+
     NSString *requestURL = operation.request.URL.absoluteString;
-    NSData *responseData = operation.responseData;
 
     NSDictionary *HTTPHeaders = operation.response.allHeaderFields;
-    NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
-                                                                         format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
-    NSNumber *responseSize = @(HTTPHeadersData.length + responseData.length);
+    NSUInteger HTTPHeadersSize = 0;
+
+    if (HTTPHeaders) {
+        NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        HTTPHeadersSize = HTTPHeadersData.length;
+    }
+
+    NSData *responseData = operation.responseData;
+    NSUInteger responseDataSize = responseData ? responseData.length : 0;
+
+    NSNumber *responseSize = @(HTTPHeadersSize + responseDataSize);
 
     NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:objc_getAssociatedObject(operation, AFNLHTTPRequestOperationStartDate)];
     NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
@@ -46,13 +65,17 @@
 
     NSString *elapsedTimeString = [numberFormatter stringFromNumber:@(elapsedTime)];
 
-    NSString *log = @"";
-    if (operation.error == nil) {
-        NSString *logFormat = @("%@ %u %@, %@ bytes in %@s\n");
+    NSString *log;
 
-        log = [NSString stringWithFormat:logFormat, HTTPMethod, statusCode, requestURL, responseSize, elapsedTimeString];
+    if (operation.error == nil) {
+        NSString *logFormat = @("%@ %@, %@ bytes in %@s\n");
+        log = [NSString stringWithFormat:logFormat, statusCodeString, requestURL, responseSize, elapsedTimeString];
     } else {
-        // TODO
+        NSString *logFormat = @("%@ %@ %@, %@ bytes in %@s\n");
+
+        NSString *NSURLErrorWarningString = [NSString stringWithFormat:@"/*** %@ %@ ***/", [AFNL_NSURLErrorCodes() objectForKey:@(operation.error.code)], @(operation.error.code)];
+
+        log = [NSString stringWithFormat:logFormat, NSURLErrorWarningString, statusCodeString, requestURL, responseSize, elapsedTimeString];
     }
 
     return log;
@@ -213,9 +236,6 @@
     @autoreleasepool {
 
 #pragma mark AFHTTPRequestOperation components
-
-        NSString *HTTPMethod = operation.request.HTTPMethod;
-
         NSUInteger statusCode = operation.response.statusCode;
 
         NSString *statusCodeString;

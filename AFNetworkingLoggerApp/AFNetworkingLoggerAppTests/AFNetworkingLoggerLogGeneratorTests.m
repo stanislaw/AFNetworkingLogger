@@ -89,4 +89,33 @@
     }
 }
 
+- (void)testExample3 {
+    __block BOOL flag = NO;
+
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return YES;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorNotConnectedToInternet userInfo:nil];
+        return [OHHTTPStubsResponse responseWithError:error];
+    }];
+
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar"]];
+    [urlRequest setValue:@"application/json" forHTTPHeaderField: @"Accept"];
+    [urlRequest setValue:@"ru" forHTTPHeaderField: @"Accept-Language"];
+
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
+
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        abort();
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        flag = YES;
+    }];
+
+    [requestOperation start];
+
+    while (flag == NO) {
+        runLoopIfNeeded();
+    }
+};
+
 @end

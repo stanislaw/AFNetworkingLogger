@@ -23,13 +23,13 @@
 		8674172617F3AD1F00B8BA45 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8674170517F3AD1F00B8BA45 /* UIKit.framework */; };
 		8674172E17F3AD1F00B8BA45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8674172C17F3AD1F00B8BA45 /* InfoPlist.strings */; };
 		8688B4FF17F3C2EA008C188D /* NSURL+QueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 8688B4FE17F3C2EA008C188D /* NSURL+QueryComponents.m */; };
-		8688B50117F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8688B50017F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m */; };
 		86AE0EF417F3BCBB0077503B /* AFNetworkingLogGenerators.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EF317F3BCBB0077503B /* AFNetworkingLogGenerators.m */; };
 		86AE0EF717F3BF410077503B /* AFHTTPRequestOperation+StartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EEF17F3B51B0077503B /* AFHTTPRequestOperation+StartDate.m */; };
 		86AE0EF817F3BF410077503B /* AFNetworkingLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EE417F3AF000077503B /* AFNetworkingLogger.m */; };
 		86AE0EFA17F3BF420077503B /* AFHTTPRequestOperation+StartDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EEF17F3B51B0077503B /* AFHTTPRequestOperation+StartDate.m */; };
 		86AE0EFB17F3BF420077503B /* AFNetworkingLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EE417F3AF000077503B /* AFNetworkingLogger.m */; };
 		86AE0EFD17F3BF460077503B /* AFNetworkingLogGenerators.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE0EF317F3BCBB0077503B /* AFNetworkingLogGenerators.m */; };
+		86CA2E3717F422F8006615F2 /* AFNetworkingLoggerLogGeneratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8674172F17F3AD1F00B8BA45 /* AFNetworkingLoggerLogGeneratorTests.m */; };
 		E3FB4BBEE2734FB4927AB2BC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E21E858AC4ED422E8CDFFD71 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -387,9 +387,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				86AE0EFA17F3BF420077503B /* AFHTTPRequestOperation+StartDate.m in Sources */,
-				8688B50117F3CCD6008C188D /* AFNetworkingLoggerVerboseLogGeneratorTests.m in Sources */,
 				86AE0EFB17F3BF420077503B /* AFNetworkingLogger.m in Sources */,
 				86AE0EF417F3BCBB0077503B /* AFNetworkingLogGenerators.m in Sources */,
+				86CA2E3717F422F8006615F2 /* AFNetworkingLoggerLogGeneratorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
