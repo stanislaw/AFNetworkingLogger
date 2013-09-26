@@ -235,7 +235,7 @@
 
         if (operation.error) {
             NSString *NSURLErrorCodeString = [AFNL_NSURLErrorCodes() objectForKey:@(operation.error.code)];
-            NSURLErrorWarningString = [NSString stringWithFormat:@("*** %@ %@ ***"), NSURLErrorCodeString, @(operation.error.code)];
+            NSURLErrorWarningString = [NSString stringWithFormat:@("/* %@ %@ */"), NSURLErrorCodeString, @(operation.error.code)];
         }
 
 #pragma mark Header string (HTTP method, status code, URL)
