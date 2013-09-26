@@ -89,7 +89,7 @@
 
         if (operation.error) {
             NSString *NSURLErrorCodeString = [AFNL_NSURLErrorCodes() objectForKey:@(operation.error.code)];
-            NSURLErrorWarningString = [NSString stringWithFormat:@("*** Cocoa NSURLError: %@ %@ ***"), NSURLErrorCodeString, @(operation.error.code)];
+            NSURLErrorWarningString = [NSString stringWithFormat:@("*** %@ %@ ***"), NSURLErrorCodeString, @(operation.error.code)];
         }
 
 #pragma mark Header string (HTTP method, status code, URL)
@@ -159,11 +159,11 @@
         NSString *responseBodyString = [paddingString copy];
 
         if (operation.responseData.length == 0) {
-            responseBodyString = [responseBodyString stringByAppendingString:@"No response body"];
+            responseBodyString = [responseBodyString stringByAppendingString:@"No response body."];
         } else if (operation.responseData.length <= (1024 * 100)) {
             responseBodyString = [responseBodyString stringByAppendingString:[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]];
         } else {
-            responseBodyString = [responseBodyString stringByAppendingString:@"Response body data is too large"];
+            responseBodyString = [responseBodyString stringByAppendingString:@"Response body data is too large to be displayed..."];
         }
 
 #pragma mark Aggregation of formatted log string
@@ -185,7 +185,7 @@
             [logComponents addObject:@"\n"];
         }
 
-//        [logComponents addObject:@"\n"];
+        [logComponents addObject:@"\n"];
 
         [logComponents addObject:responseSizeAndElapsedTimeString];
 
@@ -202,13 +202,10 @@
         [logComponents addObject:responseBodyString];
 
         [logComponents addObject:@"\n"];
+        [logComponents addObject:@"\n"];
 
-        // if (operation.error == nil) {
-            log = [logComponents componentsJoinedByString:@""];
-        // } else {
-            // TODO
-        // }
 
+        log = [logComponents componentsJoinedByString:@""];
     }
 
     return log;
