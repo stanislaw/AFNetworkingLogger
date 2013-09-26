@@ -62,6 +62,142 @@
 
 @implementation AFNetworkingVerboseLogGenerator
 
+- (NSString *)generateLogForRequestDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
+    NSString *log = [NSString string];
+
+    @autoreleasepool {
+
+#pragma mark AFHTTPRequestOperation components
+
+        NSString *HTTPMethod = operation.request.HTTPMethod;
+        NSDictionary *HTTPHeaders = operation.request.allHTTPHeaderFields;
+
+        NSUInteger HTTPHeadersDataSize;
+
+        if (HTTPHeaders && HTTPHeaders.count > 0) {
+            NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
+                                                                             format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+            HTTPHeadersDataSize = HTTPHeadersData.length;
+        } else {
+            HTTPHeadersDataSize = 0;
+        }
+
+        NSData *HTTPBodyData = operation.request.HTTPBody;
+        NSUInteger HTTPBodyDataSize = HTTPBodyData ? HTTPBodyData.length : 0;
+
+        NSUInteger requestSize = HTTPHeadersDataSize + HTTPBodyDataSize;
+
+#pragma mark Paddings
+
+        NSString *paddingString = [NSString stringWithFormat:@"%@ ", HTTPMethod];
+        paddingString = [@"" stringByPaddingToLength:paddingString.length withString:@" " startingAtIndex:0];
+        NSString *responseSizePaddingString = [@"" stringByPaddingToLength:(paddingString.length - 3) withString:@" " startingAtIndex:0];
+
+#pragma mark Header string (HTTP method, status code, URL)
+
+        NSArray *URLComponents = [operation.request.URL.absoluteString componentsSeparatedByString:@"?"];
+        BOOL queryComponentsPresent = URLComponents.count == 2;
+
+        NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
+        NSString *headerString = [NSString stringWithFormat:@("%@ %@"), HTTPMethod, URLStringWithoutQueryPart];
+
+        if (queryComponentsPresent) {
+            headerString = [headerString stringByAppendingString:@"?"];
+        }
+
+        NSDictionary *queryComponents = operation.request.URL.queryComponents;
+        NSMutableArray *queryComponentsStrings = [NSMutableArray array];
+        [queryComponents enumerateKeysAndObjectsUsingBlock:^(id queryKey, id queryValue, BOOL *stop) {
+            NSString *queryValueString = [queryValue lastObject];
+
+            NSString *queryComponentString = [NSString stringWithFormat:@("%@%@"), paddingString, [@[queryKey, queryValueString] componentsJoinedByString:@"="]];
+
+            if ([queryComponents.allKeys indexOfObject:queryKey] != (queryComponents.count - 1)) {
+                queryComponentString = [queryComponentString stringByAppendingString:@"&"];
+            }
+
+            [queryComponentsStrings addObject:queryComponentString];
+        }];
+        NSString *queryComponentsString = [queryComponentsStrings componentsJoinedByString:@"\n"];
+
+#pragma mark Request size
+
+        NSString *requestSizeString = [NSString stringWithFormat:@"%@   %@ bytes", responseSizePaddingString, @(requestSize)];
+
+#pragma mark HTTP headers
+        NSString *HTTPHeadersString;
+
+        if (HTTPHeaders) {
+            NSMutableArray *HTTPHeadersStrings = [NSMutableArray array];
+
+            __block NSUInteger calculatedHTTPHeadersPadding = 0;
+            [HTTPHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                calculatedHTTPHeadersPadding = MAX(calculatedHTTPHeadersPadding, [key length]);
+            }];
+
+            [HTTPHeaders enumerateKeysAndObjectsUsingBlock:^(id HTTPHeaderKey, id HTTPHeaderKeyValue, BOOL *stop) {
+                NSString *HTTPHeaderKeyString = [HTTPHeaderKey stringByPaddingToLength:calculatedHTTPHeadersPadding withString:@" " startingAtIndex:0];
+                NSString *HTTPHeaderString = [NSString stringWithFormat:@"%@%@ = %@", paddingString, HTTPHeaderKeyString, HTTPHeaderKeyValue];
+                [HTTPHeadersStrings addObject:HTTPHeaderString];
+            }];
+
+            HTTPHeadersString = [HTTPHeadersStrings componentsJoinedByString:@"\n"];
+        }
+
+#pragma mark HTTP response body
+
+        NSString *requestBodyString = [paddingString copy];
+
+        if (0 < HTTPBodyDataSize && HTTPBodyDataSize <= (1024 * 100)) {
+            requestBodyString = [requestBodyString stringByAppendingString:[[NSString alloc] initWithData:HTTPBodyData encoding:NSUTF8StringEncoding]];
+        } else if (HTTPBodyDataSize <= (1024 * 100)) {
+            requestBodyString = [requestBodyString stringByAppendingString:@"Request body data is too large to be displayed..."];
+        }
+
+#pragma mark Aggregation of formatted log string
+
+        NSMutableArray *logComponents = [NSMutableArray array];
+
+        [logComponents addObject:@"\n"];
+
+        [logComponents addObject:headerString];
+
+        [logComponents addObject:@"\n"];
+
+        if (queryComponentsPresent) {
+            [logComponents addObject:queryComponentsString];
+
+            [logComponents addObject:@"\n"];
+            [logComponents addObject:@"\n"];
+        } else {
+            [logComponents addObject:@"\n"];
+        }
+
+        if (HTTPHeaders && HTTPHeaders.count > 0) {
+            [logComponents addObject:HTTPHeadersString];
+
+            [logComponents addObject:@"\n"];
+            [logComponents addObject:@"\n"];
+        }
+
+        if (HTTPBodyDataSize > 0) {
+            [logComponents addObject:requestBodyString];
+
+            [logComponents addObject:@"\n"];
+            [logComponents addObject:@"\n"];
+        }
+
+        [logComponents addObject:requestSizeString];
+
+        [logComponents addObject:@"\n"];
+        [logComponents addObject:@"\n"];
+
+        log = [logComponents componentsJoinedByString:@""];
+    }
+    
+    return log;
+}
+
 - (NSString *)generateLogForResponseDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
     NSString *log = [NSString string];
 
@@ -70,7 +206,17 @@
 #pragma mark AFHTTPRequestOperation components
 
         NSString *HTTPMethod = operation.request.HTTPMethod;
+
         NSUInteger statusCode = operation.response.statusCode;
+
+        NSString *statusCodeString;
+
+        if (100 <= statusCode && statusCode < 600) {
+            statusCodeString = [@(statusCode) stringValue];
+        } else {
+            statusCodeString = @"N/A";
+        }
+
         NSData *responseData = operation.responseData;
         NSDictionary *HTTPHeaders = operation.response.allHeaderFields;
         NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
@@ -78,7 +224,7 @@
 
 #pragma mark Paddings
 
-        NSString *paddingString = [NSString stringWithFormat:@"%@ %@ ", HTTPMethod, @(statusCode)];
+        NSString *paddingString = [NSString stringWithFormat:@"%@ ", statusCodeString];
         paddingString = [@"" stringByPaddingToLength:paddingString.length withString:@" " startingAtIndex:0];
         NSString *responseSizePaddingString = [@"" stringByPaddingToLength:(paddingString.length - 3) withString:@" " startingAtIndex:0];
 
@@ -98,7 +244,7 @@
         BOOL queryComponentsPresent = URLComponents.count == 2;
 
         NSString *URLStringWithoutQueryPart = [URLComponents objectAtIndex:0];
-        NSString *headerString = [NSString stringWithFormat:@("%@ %@ %@"), HTTPMethod, @(statusCode), URLStringWithoutQueryPart];
+        NSString *headerString = [NSString stringWithFormat:@("%@ %@"), statusCodeString, URLStringWithoutQueryPart];
 
         if (queryComponentsPresent) {
             headerString = [headerString stringByAppendingString:@"?"];
@@ -175,6 +321,7 @@
         if (operation.error) {
             [logComponents addObject:NSURLErrorWarningString];
             [logComponents addObject:@"\n"];
+            [logComponents addObject:@"\n"];
         }
 
         [logComponents addObject:headerString];
@@ -182,6 +329,7 @@
 
         if (queryComponentsPresent) {
             [logComponents addObject:queryComponentsString];
+
             [logComponents addObject:@"\n"];
         }
 

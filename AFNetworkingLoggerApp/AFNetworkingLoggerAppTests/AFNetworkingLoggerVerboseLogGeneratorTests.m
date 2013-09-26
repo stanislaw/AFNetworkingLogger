@@ -43,8 +43,7 @@
         return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:nil];
     }];
 
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar"]];
-    urlRequest.HTTPBody = [dictionary JSONData];
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar?param1=value1&param2=value2"]];
 
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
     [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -114,7 +113,10 @@
         return [OHHTTPStubsResponse responseWithError:error];
     }];
 
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"www.foo.bar"]];
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar"]];
+    [urlRequest setValue:@"application/json" forHTTPHeaderField: @"Accept"];
+    [urlRequest setValue:@"ru" forHTTPHeaderField: @"Accept-Language"];
+
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
 
     [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -146,6 +148,40 @@
         abort();
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         flag = YES;
+    }];
+
+    [requestOperation start];
+
+    while (flag == NO) {
+        runLoopIfNeeded();
+    }
+}
+
+- (void)testExample5 {
+    __block BOOL flag = NO;
+
+    NSDictionary *dictionary = @{ @"KEY": @"VALUE" };
+
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return YES;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:nil];
+    }];
+
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar"]];
+    [urlRequest setValue:@"application/json" forHTTPHeaderField: @"Accept"];
+    [urlRequest setValue:@"ru" forHTTPHeaderField: @"Accept-Language"];
+    [urlRequest setHTTPMethod:@"POST"];
+
+    NSString *dataString = @"A data string";
+    [urlRequest setHTTPBody:[dataString dataUsingEncoding:NSUTF8StringEncoding]];
+
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
+
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        flag = YES;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        abort();
     }];
 
     [requestOperation start];
