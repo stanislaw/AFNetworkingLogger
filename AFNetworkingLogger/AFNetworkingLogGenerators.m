@@ -9,7 +9,7 @@
 #import "AFNetworkingLogGenerators.h"
 #import "AFNetworkingLoggerConstants.h"
 
-#import "NSURL+QueryComponents.h"
+#import "NSURL+AFNL.h"
 
 #import <objc/runtime.h>
 

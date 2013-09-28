@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSURL (AFNL_QueryComponents)
+@interface NSURL (AFNL)
 - (NSDictionary *)queryComponents;
 @end

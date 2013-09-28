@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import <AFNetworking/AFHTTPRequestOperation.h>
-#import "AFHTTPRequestOperation+StartDate.h"
+#import "AFHTTPRequestOperation+AFNL.h"
 
 @protocol AFNetworkingLogGenerator <NSObject>
 - (NSString *)generateLogForRequestDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation;

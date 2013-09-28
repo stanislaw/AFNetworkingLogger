@@ -6,26 +6,18 @@
 //  Copyright (c) 2013 Stanislaw Pankevich. All rights reserved.
 //
 
-#import "NSURL+QueryComponents.h"
+#import "NSURL+AFNL.h"
 
-@interface NSString (AFNL_QueryComponents)
+@interface NSString (AFNL)
 - (NSMutableDictionary *)dictionaryFromQueryComponents;
 @end
 
-@implementation NSString (AFNL_QueryComponents)
+@implementation NSString (AFNL)
 
 - (NSString *)stringByDecodingURLFormat {
     NSString *result = [self stringByReplacingOccurrencesOfString:@"+" withString:@" "];
 
     result = [result stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-    return result;
-}
-
-- (NSString *)stringByEncodingURLFormat {
-    NSString *result = [self stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-
-    result = [result stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
     return result;
 }
@@ -56,7 +48,7 @@
 
 @end
 
-@implementation NSURL (AFNL_QueryComponents)
+@implementation NSURL (AFNL)
 
 - (NSDictionary *)queryComponents {
     return self.query.dictionaryFromQueryComponents;

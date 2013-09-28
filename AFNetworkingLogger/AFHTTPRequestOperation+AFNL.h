@@ -10,7 +10,7 @@
 
 extern void * AFNLHTTPRequestOperationStartDate;
 
-@interface AFHTTPRequestOperation (StartDate)
+@interface AFHTTPRequestOperation (AFNL)
 
 - (NSDate *)AFNLStartDate;
 - (void)setAFNLStartDate:(NSDate *)date;
