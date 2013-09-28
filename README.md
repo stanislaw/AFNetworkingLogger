@@ -3,7 +3,23 @@ AFNetworkingLogger
 
 ![AFNetworkingLogger example](https://raw.github.com/stanislaw/AFNetworkingLogger/master/Examples/AFNetworkingLogger.png)
 
-Docs are coming...
+## Overview
+
+AFNetworkingLogger is a grateful child of [AFHTTPRequestOperationLogger](https://github.com/AFNetworking/AFHTTPRequestOperationLogger) created by Mattt Thompson (@mattt) for [AFNetworking](https://github.com/AFNetworking/AFNetworking) library. It is not the one: there is also its closest brother and companion [AFNetworkingMeter](https://github.com/stanislaw/AFNetworkingMeter) - they share similar design and are both built for the same purpose: to make a HTTP-logging routine for a daily basis of iOS/Mac development easy and informative.
+
+Features list:
+
+* Logging of HTTP interactions performed by iOS / Mac OS X applications.  AFNetworkingLogger logs the following HTTP data: 
+    * HTTP methods: GET, POST, ...
+    * HTTP headers Keep-Alive, Last-Modified, ... 
+    * HTTP body: no comments. Large bodies are truncated
+    * HTTP size: headers + body. Headers size is calculated using `-[NSPropertyListSerialization dataFromPropertyList:...`. Let me know if you know a more precise way of doing this.
+    * HTTP elapsed time: a time beetween `AFNetworkingOperationDidStartNotification` and `AFNetworkingOperationDidFinishNotification`. 
+
+* Two levels of verbosity: normal (one string for one request like in [AFHTTPRequestOperationLogger](https://github.com/AFNetworking/AFHTTPRequestOperationLogger)) and verbose (example above).
+* Logging HTTP errors and networking errors: both HTTP 400-600 errors and Cocoa NSURL-based errors (NSURLErrorNotConnectedToInternet and friends).
+* Error-only logging.
+* Remote logging: configure AFNetworkingLogger for logging inside your TestFlight builds by writing custom C function to stand proxy for TestFlight's `TFLog/TFLogv` functions.
 
 ## Installation
 
@@ -48,8 +64,17 @@ AFNetworkingLogger.sharedLogger.level = AFNetworkingLoggerLevelVerbose;
 [AFNetworkingLogger sharedLogger].output = &printf; // Any other printf-like function is fine.
 ```
 
-The following is an example of how to configure an iOS application for
-remote logging while it performs its TestFlight:
+### Errors-only logging
+
+The following will make AFNetworkingLogger to register only erroneuous HTTP responses: HTTP 400-600 errors and/or Cocoa NSURLError-based errors (including non-HTTP connection errors likeNSURLErrorNotConnectedToInternet).
+
+```objective-c
+[AFNetworkingLogger sharedLogger].errorsOnlyLogging = YES; 
+```
+
+## Remote logging
+
+The following is an example of how to configure an iOS application for remote logging while it performs its TestFlight:
 
 ```objective-c
 #import <TestFlightSDK/TestFlight.h>
@@ -73,6 +98,8 @@ int AFNetworkingRemoteLoggingCFunction(const char * format, ... ) {
     // see https://github.com/stanislaw/iosenv
     if (isProduction()) { 
         [AFNetworkingLogger sharedLogger].output = &AFNetworkingRemoteLoggingCFunction;
+        [AFNetworkingLogger sharedLogger].errorsOnlyLogging = YES;
+        [AFNetworkingLogger startLogging];
     }
     
     // ...
@@ -84,6 +111,10 @@ int AFNetworkingRemoteLoggingCFunction(const char * format, ... ) {
 ## TODO
 
 ...
+
+## Notes
+
+* This line is designated for excuses about Russian/Ukrainian english that probably resulted in some misspelings exist somewhere in this README. The author will be thankful for any spelling corrections that might appear.
 
 ## Credits
 
@@ -97,5 +128,5 @@ AFNetworkingLogger is inspired by the design of the similar [AFNetworking](https
 
 ## Copyright
 
-Not yet.
-d
+Copyright (c) 2013 Stanislaw Pankevich. See LICENSE for details.
+ 
