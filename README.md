@@ -28,11 +28,24 @@ You need to start AFNetworkingLogger somewhere. For example, your app's delegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
-    AFNetworkingLogger.sharedLogger.level = AFNetworkingLoggerLevelVerbose;
     [AFNetworkingLogger.sharedLogger startLogging];
 
     return YES;
 }
+```
+
+## Configuration
+
+### Logging levels
+
+```objective-c
+AFNetworkingLogger.sharedLogger.level = AFNetworkingLoggerLevelVerbose;
+```
+
+### Output
+
+```objective-c
+[AFNetworkingLogger sharedLogger].output = &printf; // Any other printf-like function is fine.
 ```
 
 ## TODO
