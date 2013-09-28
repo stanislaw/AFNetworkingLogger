@@ -13,7 +13,7 @@ Features list:
     * HTTP methods: GET, POST, ...
     * HTTP headers Keep-Alive, Last-Modified, ... 
     * HTTP body: no comments. Large bodies are truncated
-    * HTTP size: headers + body. Headers size is calculated using `-[NSPropertyListSerialization dataFromPropertyList:...`. Let me know if you know a more precise way of doing this.
+    * HTTP size: headers + body.
     * HTTP elapsed time: a time beetween `AFNetworkingOperationDidStartNotification` and `AFNetworkingOperationDidFinishNotification`. 
 
 * Two levels of verbosity: normal (one string for one request like in [AFHTTPRequestOperationLogger](https://github.com/AFNetworking/AFHTTPRequestOperationLogger)) and verbose (example above).
@@ -113,7 +113,8 @@ int AFNetworkingRemoteLoggingCFunction(const char * format, ... ) {
 ...
 
 ## Notes
-
+ 
+* Currently `AFNetworkingLogger` calculates HTTP headers size using `-[NSPropertyListSerialization dataFromPropertyList:...` (-[NSURLRequest allHTTPHeaderFields] => NSData). Let me know if there is a more precise way of doing this.
 * This line is designated for excuses about Russian/Ukrainian english that probably resulted in some misspelings exist somewhere in this README. The author will be thankful for any spelling corrections that might appear.
 
 ## Credits
