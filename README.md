@@ -48,6 +48,39 @@ AFNetworkingLogger.sharedLogger.level = AFNetworkingLoggerLevelVerbose;
 [AFNetworkingLogger sharedLogger].output = &printf; // Any other printf-like function is fine.
 ```
 
+The following is an example of how to configure an iOS application for
+remote logging while it performs its TestFlight:
+
+```objective-c
+#import <TestFlightSDK/TestFlight.h>
+
+int AFNetworkingRemoteLoggingCFunction(const char * format, ... ) {
+    va_list arguments;
+
+    va_start(arguments, format);
+
+    NSString *formatString = [NSString stringWithUTF8String:format];
+
+    TFLogv(formatString, arguments);
+
+    va_end(arguments);
+
+    return 0;
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // see https://github.com/stanislaw/iosenv
+    if (isProduction()) { 
+        [AFNetworkingLogger sharedLogger].output = &AFNetworkingRemoteLoggingCFunction;
+    }
+    
+    // ...
+
+    return YES;
+}
+```
+
 ## TODO
 
 ...
