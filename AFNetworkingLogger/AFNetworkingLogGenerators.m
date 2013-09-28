@@ -73,7 +73,7 @@
     } else {
         NSString *logFormat = @("%@ %@ %@, %@ bytes in %@s\n");
 
-        NSString *NSURLErrorWarningString = [NSString stringWithFormat:@"/*** %@ %@ ***/", [AFNL_NSURLErrorCodes() objectForKey:@(operation.error.code)], @(operation.error.code)];
+        NSString *NSURLErrorWarningString = [NSString stringWithFormat:@"/*** %@ %@ ***/", AFNL_NSStringFromNSURLError(operation.error), @(operation.error.code)];
 
         log = [NSString stringWithFormat:logFormat, NSURLErrorWarningString, statusCodeString, requestURL, responseSize, elapsedTimeString];
     }
@@ -264,7 +264,7 @@
         NSString *NSURLErrorWarningString;
 
         if (operation.error) {
-            NSString *NSURLErrorCodeString = [AFNL_NSURLErrorCodes() objectForKey:@(operation.error.code)];
+            NSString *NSURLErrorCodeString = AFNL_NSStringFromNSURLError(operation.error);
             NSURLErrorWarningString = [NSString stringWithFormat:@("/* %@ %@ */"), NSURLErrorCodeString, @(operation.error.code)];
         }
 
