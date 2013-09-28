@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, AFNetworkingLoggerLevel) {
   AFNetworkingLoggerLevelVerbose,
 };
 
+typedef int (* AFNetworkingLoggerOutputCFunction)(const char *format, ...);
+
 @interface AFNetworkingLogger : NSObject
 
 @property (nonatomic, assign) AFNetworkingLoggerLevel level;
@@ -35,6 +37,8 @@ typedef NS_ENUM(NSUInteger, AFNetworkingLoggerLevel) {
 @property (nonatomic, strong) NSPredicate *filterPredicate;
 
 + (instancetype)sharedLogger;
+
+@property (nonatomic) AFNetworkingLoggerOutputCFunction output;
 
 - (void)startLogging;
 - (void)stopLogging;

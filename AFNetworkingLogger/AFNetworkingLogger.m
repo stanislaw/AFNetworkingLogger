@@ -64,6 +64,14 @@
     _level = level;
 }
 
+- (AFNetworkingLoggerOutputCFunction)output {
+    if (_output == nil) {
+        _output = &printf;
+    }
+
+    return _output;
+}
+
 - (id <AFNetworkingLogGenerator>)logGenerator {
     if (_logGenerator == nil) {
         switch (self.level) {
@@ -114,7 +122,7 @@
 
     if (self.level != AFNetworkingLoggerLevelOff) {
         NSString *log = [self.logGenerator generateLogForRequestDataOfAFHTTPRequestOperation:operation];
-        printf("%s", log.UTF8String);
+        self.output("%s", log.UTF8String);
     }
 }
 
@@ -131,7 +139,7 @@
 
     if (self.level != AFNetworkingLoggerLevelOff) {
         NSString *log = [self.logGenerator generateLogForResponseDataOfAFHTTPRequestOperation:operation];
-        printf("%s", log.UTF8String);
+        self.output("%s", log.UTF8String);
     }
 }
 
