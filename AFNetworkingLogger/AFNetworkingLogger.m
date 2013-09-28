@@ -43,12 +43,12 @@
 
 - (id)init {
     self = [super init];
-    if (!self) {
-        return nil;
-    }
+
+    if (self == nil) return nil;
     
     self.level = AFNetworkingLoggerLevelNormal;
-    
+    self.errorsOnlyLogging = NO;
+
     return self;
 }
 
@@ -110,7 +110,7 @@
 - (void)HTTPOperationDidStart:(NSNotification *)notification {
     AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)[notification object];
     
-    if (![operation isKindOfClass:[AFHTTPRequestOperation class]]) {
+    if ([operation isKindOfClass:[AFHTTPRequestOperation class]] == NO) {
         return;
     }
     
@@ -120,7 +120,7 @@
         return;
     }
 
-    if (self.level != AFNetworkingLoggerLevelOff) {
+    if (self.level != AFNetworkingLoggerLevelOff && self.errorsOnlyLogging == NO) {
         NSString *log = [self.logGenerator generateLogForRequestDataOfAFHTTPRequestOperation:operation];
         self.output("%s", log.UTF8String);
     }
@@ -129,7 +129,7 @@
 - (void)HTTPOperationDidFinish:(NSNotification *)notification {
     AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)[notification object];
 
-    if (![operation isKindOfClass:[AFHTTPRequestOperation class]]) {
+    if ([operation isKindOfClass:[AFHTTPRequestOperation class]] == NO) {
         return;
     }
     
@@ -137,7 +137,7 @@
         return;
     }
 
-    if (self.level != AFNetworkingLoggerLevelOff) {
+    if (self.level != AFNetworkingLoggerLevelOff || self.errorsOnlyLogging) {
         NSString *log = [self.logGenerator generateLogForResponseDataOfAFHTTPRequestOperation:operation];
         self.output("%s", log.UTF8String);
     }

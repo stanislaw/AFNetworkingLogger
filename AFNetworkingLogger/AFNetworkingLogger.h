@@ -32,13 +32,12 @@ typedef int (* AFNetworkingLoggerOutputCFunction)(const char *format, ...);
 
 @interface AFNetworkingLogger : NSObject
 
-@property (nonatomic, assign) AFNetworkingLoggerLevel level;
-
-@property (nonatomic, strong) NSPredicate *filterPredicate;
-
 + (instancetype)sharedLogger;
 
+@property (nonatomic, assign) AFNetworkingLoggerLevel level;
+@property (nonatomic, strong) NSPredicate *filterPredicate;
 @property (nonatomic) AFNetworkingLoggerOutputCFunction output;
+@property BOOL errorsOnlyLogging;
 
 - (void)startLogging;
 - (void)stopLogging;
