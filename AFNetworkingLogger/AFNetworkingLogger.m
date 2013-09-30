@@ -137,7 +137,9 @@
         return;
     }
 
-    if (self.level != AFNetworkingLoggerLevelOff || self.errorsOnlyLogging) {
+    if (self.level != AFNetworkingLoggerLevelOff) {
+        if (self.errorsOnlyLogging && operation.error == nil) return;
+        
         NSString *log = [self.logGenerator generateLogForResponseDataOfAFHTTPRequestOperation:operation];
         self.output("%s", log.UTF8String);
     }
