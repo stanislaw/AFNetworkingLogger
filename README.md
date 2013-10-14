@@ -108,10 +108,6 @@ int AFNetworkingRemoteLoggingCFunction(const char * format, ... ) {
 }
 ```
 
-## TODO
-
-...
-
 ## Notes
  
 * Currently `AFNetworkingLogger` calculates HTTP headers size using `-[NSPropertyListSerialization dataFromPropertyList:...` (-[NSURLRequest allHTTPHeaderFields] => NSData). Let me know if there is a more precise way of doing this.
