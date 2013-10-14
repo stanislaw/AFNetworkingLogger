@@ -176,7 +176,7 @@
             HTTPHeadersString = [HTTPHeadersStrings componentsJoinedByString:@"\n"];
         }
 
-#pragma mark HTTP response body
+#pragma mark HTTP request body
 
         NSString *requestBodyString = [paddingString copy];
 
@@ -263,9 +263,23 @@
         // *** Cocoa NSURLError: NSURLErrorCannotFindHost -1003 ***
         NSString *NSURLErrorWarningString;
 
-        if (operation.error) {
-            NSString *NSURLErrorCodeString = AFNL_NSStringFromNSURLError(operation.error);
-            NSURLErrorWarningString = [NSString stringWithFormat:@("/* %@ %@ */"), NSURLErrorCodeString, @(operation.error.code)];
+            // Call operation.error twice because of bug in either AFNetworking or Cocoa (NSURLError)
+        NSError *error = operation.error;
+                 error = operation.error;
+
+        if (error) {
+            // Malformed JSON: Error Domain=NSCocoaErrorDomain Code=3840 "The operation couldn’t be completed. (Cocoa error 3840.)" (JSON text did not start with array or object and option to allow fragments not set.) UserInfo=0xad9b5a0 {NSDebugDescription=JSON text did not start with array or object and option to allow fragments not set.}
+            if ([error.domain isEqualToString:NSCocoaErrorDomain] && error.code == NSPropertyListReadCorruptError) {
+                NSURLErrorWarningString = @"/* NSPropertyListReadCorruptError 3840 */";
+            } else {
+                NSString *NSURLErrorCodeString = AFNL_NSStringFromNSURLError(operation.error);
+
+                if (NSURLErrorCodeString == nil) {
+                    NSURLErrorCodeString = @"Unknown error";
+                }
+
+                NSURLErrorWarningString = [NSString stringWithFormat:@("/* %@ %@ */"), NSURLErrorCodeString, @(operation.error.code)];
+            }
         }
 
 #pragma mark Header string (HTTP method, status code, URL)

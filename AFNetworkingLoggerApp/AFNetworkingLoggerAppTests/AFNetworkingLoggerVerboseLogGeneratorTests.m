@@ -191,4 +191,32 @@
     }
 }
 
+- (void)testExample6 {
+    __block BOOL flag = NO;
+
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return YES;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        return [OHHTTPStubsResponse responseWithData:nil statusCode:302 headers:nil];
+    }];
+
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"www.foo.bar"]];
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
+
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        abort();
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"WULLY %@ %@", operation, error.domain);
+
+        flag = YES;
+    }];
+
+    [requestOperation start];
+
+    while (flag == NO) {
+        runLoopIfNeeded();
+    }
+}
+
+
 @end
