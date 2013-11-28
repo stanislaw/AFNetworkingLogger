@@ -127,3 +127,7 @@ AFNetworkingLogger is inspired by the design of the similar [AFNetworking](https
 
 Copyright (c) 2013 Stanislaw Pankevich. See LICENSE for details.
  
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/stanislaw/afnetworkinglogger/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
