@@ -86,7 +86,7 @@
 @implementation AFNetworkingVerboseLogGenerator
 
 - (NSString *)generateLogForRequestDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
-    NSString *log = [NSString string];
+    NSString *log;
 
     @autoreleasepool {
 
@@ -232,7 +232,7 @@
 }
 
 - (NSString *)generateLogForResponseDataOfAFHTTPRequestOperation:(AFHTTPRequestOperation *)operation {
-    NSString *log = [NSString string];
+    NSString *log;
 
     @autoreleasepool {
 
@@ -264,8 +264,7 @@
         NSString *NSURLErrorWarningString;
 
             // Call operation.error twice because of bug in either AFNetworking or Cocoa (NSURLError)
-        NSError *error = operation.error;
-                 error = operation.error;
+        NSError *error = operation.error ?: operation.error;
 
         if (error) {
             // Malformed JSON: Error Domain=NSCocoaErrorDomain Code=3840 "The operation couldn’t be completed. (Cocoa error 3840.)" (JSON text did not start with array or object and option to allow fragments not set.) UserInfo=0xad9b5a0 {NSDebugDescription=JSON text did not start with array or object and option to allow fragments not set.}
@@ -379,7 +378,7 @@
 
         [logComponents addObject:@"\n"];
 
-        if (operation.error) {
+        if (operation.error && NSURLErrorWarningString) {
             [logComponents addObject:NSURLErrorWarningString];
             [logComponents addObject:@"\n"];
             [logComponents addObject:@"\n"];
