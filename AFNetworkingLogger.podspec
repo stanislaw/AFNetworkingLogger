@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.source_files = 'AFNetworkingLogger/*.{h,m}'
   s.private_header_files = 'AFNetworkingLogger/AFNetworkingLogger_Private.h'
 
-  s.ios.deployment_target = '5.0'
-  s.osx.deployment_target = '10.7'
+  s.ios.deployment_target = '6.0'
+  s.osx.deployment_target = '10.8'
   s.requires_arc = true
 
   s.dependency 'AFNetworking'

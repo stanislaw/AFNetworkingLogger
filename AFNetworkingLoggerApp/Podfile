@@ -1,5 +1,6 @@
-pod 'AFNetworking', '~>1'
-pod 'JSONKit'
+platform :ios, '6.0'
+
+pod 'AFNetworking', '~>2'
 
 target :AFNetworkingLoggerAppTests do
   pod 'Kiwi'

@@ -1,6 +1,5 @@
 #import <XCTest/XCTest.h>
 
-#import <JSONKit/JSONKit.h>
 #import <OHHTTPStubs.h>
 
 static inline void runLoopIfNeeded() {

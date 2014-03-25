@@ -36,11 +36,12 @@
     __block BOOL flag = NO;
 
     NSDictionary *dictionary = @{ @"Response data key": @"Some data" };
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
 
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return YES;
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:nil];
+        return [OHHTTPStubsResponse responseWithData:jsonData statusCode:200 headers:nil];
     }];
 
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar?param1=value1&param2=value2"]];
@@ -63,6 +64,7 @@
     __block BOOL flag = NO;
 
     NSDictionary *dictionary = @{ @"A key": @"A value" };
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
 
     NSDictionary *HTTPHeaders = @{
         @"Cache-Control"   : @"public, max-age=1800",
@@ -81,13 +83,13 @@
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return YES;
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:HTTPHeaders];
+        return [OHHTTPStubsResponse responseWithData:jsonData statusCode:200 headers:HTTPHeaders];
     }];
 
     NSURL *url = [[NSURL alloc] initWithString:@"https://api.hosthosthost.com/v1/places?bounds=55.689972,37.770996;55.702354,37.792969&fields=id,lat,lng,type_ru,name_ru,maincategory_id,current_user_likes,is_current_user_wish&limit=100&order=rating&rating=20&with_photo=1"];
 
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
-    urlRequest.HTTPBody = [dictionary JSONData];
+    urlRequest.HTTPBody = jsonData;
 
     AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
     [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -161,11 +163,12 @@
     __block BOOL flag = NO;
 
     NSDictionary *dictionary = @{ @"KEY": @"VALUE" };
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
 
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return YES;
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithData:[dictionary JSONData] statusCode:200 headers:nil];
+        return [OHHTTPStubsResponse responseWithData:jsonData statusCode:200 headers:nil];
     }];
 
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.foo.bar"]];
