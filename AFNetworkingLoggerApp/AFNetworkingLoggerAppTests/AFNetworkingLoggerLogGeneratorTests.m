@@ -17,6 +17,28 @@
 
 @implementation AFNetworkingLoggerLogGeneratorTests
 
+static char *output;
+int OutputGrabber(const char * fmt, ...) {
+    va_list args;
+    output = NULL;
+    int n;
+
+    va_start(args, fmt);
+    n = vasprintf(&output, fmt, args);
+
+    if (n != -1 && output != NULL) {
+        printf("%s", output);
+    } else {
+        abort();
+    }
+
+    //free(output);
+
+    va_end(args);
+
+    return n;
+}
+
 - (void)setUp {
     [super setUp];
 
@@ -28,8 +50,11 @@
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 
+    free(output);
+    
     [OHHTTPStubs removeAllStubs];
 }
+
 
 - (void)testExample {
     __block BOOL flag = NO;
@@ -52,6 +77,8 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         abort();
     }];
+
+    [AFNetworkingLogger sharedLogger].output = &OutputGrabber;
 
     [requestOperation start];
 
