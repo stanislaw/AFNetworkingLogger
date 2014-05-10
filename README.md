@@ -21,6 +21,8 @@ Features list:
 * Error-only logging.
 * Remote logging: configure AFNetworkingLogger for logging inside your TestFlight builds by writing custom C function to stand proxy for TestFlight's `TFLog/TFLogv` functions.
 
+__Note__ AFNetworkingLogger does not support logging of NSURLSession-based operations.
+
 ## Installation
 
 The recommended way is to install via Cocoapods:
