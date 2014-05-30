@@ -109,7 +109,12 @@
 
 - (void)HTTPOperationDidStart:(NSNotification *)notification {
     AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)[notification object];
-    
+
+    // Ignore malformed operations produced by UIImageView+AFNetworking.h
+    if (operation.request.URL == nil) {
+        return;
+    }
+
     if ([operation isKindOfClass:[AFHTTPRequestOperation class]] == NO) {
         return;
     }
@@ -128,6 +133,11 @@
 
 - (void)HTTPOperationDidFinish:(NSNotification *)notification {
     AFHTTPRequestOperation *operation = (AFHTTPRequestOperation *)[notification object];
+
+    // Ignore malformed operations produced by UIImageView+AFNetworking.h
+    if (operation.request.URL == nil) {
+        return;
+    }
 
     if ([operation isKindOfClass:[AFHTTPRequestOperation class]] == NO) {
         return;
