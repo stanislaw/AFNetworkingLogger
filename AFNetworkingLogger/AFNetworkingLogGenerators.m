@@ -358,17 +358,31 @@
 
         if (operation.responseData.length == 0) {
             responseBodyString = [responseBodyString stringByAppendingString:@"No response body."];
-        } else if (0 < operation.responseData.length && operation.responseData.length <= (1024 * 10)) {
+        }
+
+        else if (0 < operation.responseData.length && operation.responseData.length <= (1024 * 10)) {
             NSString *responseDataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
-            responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
-        } else if (operation.responseData.length <= (1024 * 100)) {
+            if (responseDataString) {
+                responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
+            } else {
+                responseBodyString = [responseBodyString stringByAppendingString:@"Response contains non-UTF8 data and is not displayed"];
+            }
+        }
+
+        else if (operation.responseData.length <= (1024 * 100)) {
             NSUInteger N = 300;
             NSData *firstNBytesOfResponseData = [responseData subdataWithRange:NSMakeRange(0, N)];
             NSString *responseDataString = [[NSString alloc] initWithData:firstNBytesOfResponseData encoding:NSUTF8StringEncoding];
 
-            responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%@ ...TRUNCATED...", responseDataString]];
-        } else {
+            if (responseDataString) {
+                responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%@ ...TRUNCATED...", responseDataString]];
+            } else {
+                responseBodyString = [responseBodyString stringByAppendingString:@"Response contains non-UTF8 data and is not displayed"];
+            }
+        }
+
+        else {
             responseBodyString = [responseBodyString stringByAppendingString:@"Response body data is too large to be displayed..."];
         }
 
