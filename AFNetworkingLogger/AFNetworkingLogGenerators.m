@@ -366,11 +366,13 @@
             if (responseDataString) {
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
             } else {
-                responseBodyString = [responseBodyString stringByAppendingString:@"Response contains non-UTF8 data and is not displayed"];
+                responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@", responseData.description];
+
+                responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
             }
         }
 
-        else if (operation.responseData.length <= (1024 * 100)) {
+        else if (operation.responseData.length <= (1024 * 128)) {
             NSUInteger N = 300;
             NSData *firstNBytesOfResponseData = [responseData subdataWithRange:NSMakeRange(0, N)];
             NSString *responseDataString = [[NSString alloc] initWithData:firstNBytesOfResponseData encoding:NSUTF8StringEncoding];
@@ -378,7 +380,9 @@
             if (responseDataString) {
                 responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%@ ...TRUNCATED...", responseDataString]];
             } else {
-                responseBodyString = [responseBodyString stringByAppendingString:@"Response contains non-UTF8 data and is not displayed"];
+                responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", responseData.description];
+
+                responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
             }
         }
 
