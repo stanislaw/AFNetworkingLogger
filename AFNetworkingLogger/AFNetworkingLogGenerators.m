@@ -386,7 +386,7 @@
             if (responseDataString) {
                 responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%@ ...TRUNCATED...", responseDataString]];
             } else {
-                responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", responseData.description];
+                responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", firstNBytesOfResponseData.description];
 
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
             }
