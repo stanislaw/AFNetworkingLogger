@@ -49,12 +49,29 @@
     self.level = AFNetworkingLoggerLevelNormal;
     self.errorsOnlyLogging = NO;
 
+    self.maxResponseBodySizeToLogWithoutTruncationInVerboseMode = 8192;
+    self.maxResponseBodySizeToLogWithTruncationInVerboseMode = 1024 * 1024;
+    self.responseBodySymbolsToLogWithTruncationInVerboseMode = 128;
+
     return self;
 }
 
 - (void)dealloc {
     [self stopLogging];
 }
+
+- (void)startLogging {
+    [self stopLogging];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
+}
+
+- (void)stopLogging {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Configuration
 
 - (void)setLevel:(AFNetworkingLoggerLevel)level {
     if (level != self.level) {
@@ -65,7 +82,7 @@
 }
 
 - (AFNetworkingLoggerOutputCFunction)output {
-    if (_output == nil) {
+    if (_output == NULL) {
         _output = &printf;
     }
 
@@ -89,19 +106,8 @@
                 break;
         }
     }
-
-    return _logGenerator;
-}
-
-- (void)startLogging {
-    [self stopLogging];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HTTPOperationDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
-}
-
-- (void)stopLogging {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    return _logGenerator;
 }
 
 #pragma mark - NSNotification

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Stanislaw Pankevich. All rights reserved.
 //
 
+#import "AFNetworkingLogger.h"
 #import "AFNetworkingLogGenerators.h"
 #import "AFNetworkingLoggerConstants.h"
 
@@ -182,7 +183,9 @@
 
         if (0 < HTTPBodyDataSize && HTTPBodyDataSize <= (1024 * 100)) {
             requestBodyString = [requestBodyString stringByAppendingString:[[NSString alloc] initWithData:HTTPBodyData encoding:NSUTF8StringEncoding]];
-        } else if (HTTPBodyDataSize <= (1024 * 100)) {
+        }
+
+        else if (HTTPBodyDataSize <= (1024 * 100)) {
             requestBodyString = [requestBodyString stringByAppendingString:@"Request body data is too large to be displayed..."];
         }
 
@@ -360,7 +363,9 @@
             responseBodyString = [responseBodyString stringByAppendingString:@"No response body."];
         }
 
-        else if (0 < operation.responseData.length && operation.responseData.length <= (1024 * 10)) {
+        else if (0 < operation.responseData.length &&
+                 operation.responseData.length <= ([AFNetworkingLogger sharedLogger].maxResponseBodySizeToLogWithoutTruncationInVerboseMode)) {
+
             NSString *responseDataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
             if (responseDataString) {
@@ -372,8 +377,9 @@
             }
         }
 
-        else if (operation.responseData.length <= (1024 * 128)) {
-            NSUInteger N = 300;
+        else if (operation.responseData.length <= ([AFNetworkingLogger sharedLogger].maxResponseBodySizeToLogWithTruncationInVerboseMode)) {
+            NSUInteger N = [AFNetworkingLogger sharedLogger].responseBodySymbolsToLogWithTruncationInVerboseMode;
+
             NSData *firstNBytesOfResponseData = [responseData subdataWithRange:NSMakeRange(0, N)];
             NSString *responseDataString = [[NSString alloc] initWithData:firstNBytesOfResponseData encoding:NSUTF8StringEncoding];
 

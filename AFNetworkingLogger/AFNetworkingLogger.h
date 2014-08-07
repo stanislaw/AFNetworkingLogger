@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, AFNetworkingLoggerLevel) {
   AFNetworkingLoggerLevelVerbose,
 };
 
-typedef int (* AFNetworkingLoggerOutputCFunction)(const char *format, ...);
+typedef int (*AFNetworkingLoggerOutputCFunction)(const char *format, ...);
 
 @interface AFNetworkingLogger : NSObject
 
@@ -38,6 +38,10 @@ typedef int (* AFNetworkingLoggerOutputCFunction)(const char *format, ...);
 @property (nonatomic, strong) NSPredicate *filterPredicate;
 @property (nonatomic) AFNetworkingLoggerOutputCFunction output;
 @property BOOL errorsOnlyLogging;
+
+@property (assign, nonatomic) NSUInteger maxResponseBodySizeToLogWithTruncationInVerboseMode;
+@property (assign, nonatomic) NSUInteger maxResponseBodySizeToLogWithoutTruncationInVerboseMode;
+@property (assign, nonatomic) NSUInteger responseBodySymbolsToLogWithTruncationInVerboseMode;
 
 - (void)startLogging;
 - (void)stopLogging;
