@@ -230,7 +230,7 @@
 
         log = [logComponents componentsJoinedByString:@""];
     }
-    
+
     return log;
 }
 
@@ -370,8 +370,16 @@
 
             if (responseDataString) {
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
-            } else {
-                responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@", responseData.description];
+            }
+
+            else {
+                if ([AFNetworkingLogger sharedLogger].logResponseBodiesContainingBinaryData) {
+                    responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@", responseData.description];
+                }
+
+                else {
+                    responseBodyString = [NSString stringWithFormat:@"Response contains non-UTF8 data and is not displayed"];
+                }
 
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
             }
@@ -385,8 +393,16 @@
 
             if (responseDataString) {
                 responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%@ ...TRUNCATED...", responseDataString]];
-            } else {
-                responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", firstNBytesOfResponseData.description];
+            }
+
+            else {
+                if ([AFNetworkingLogger sharedLogger].logResponseBodiesContainingBinaryData) {
+                    responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", firstNBytesOfResponseData.description];
+                }
+
+                else {
+                    responseBodyString = [NSString stringWithFormat:@"Response contains non-UTF8 data and is not displayed"];
+                }
 
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
             }

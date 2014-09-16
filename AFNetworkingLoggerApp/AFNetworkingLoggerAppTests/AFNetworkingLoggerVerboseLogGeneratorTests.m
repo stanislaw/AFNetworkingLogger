@@ -60,7 +60,7 @@
     }
 }
 
-- (void)testExample2 {
+- (void)_testExample2 {
     __block BOOL flag = NO;
 
     NSDictionary *dictionary = @{ @"A key": @"A value" };
@@ -209,7 +209,7 @@
     [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         abort();
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"WULLY %@ %@", operation, error.domain);
+        NSLog(@"%@ %@", operation, error.domain);
 
         flag = YES;
     }];

@@ -39,6 +39,7 @@ typedef int (*AFNetworkingLoggerOutputCFunction)(const char *format, ...);
 @property (nonatomic) AFNetworkingLoggerOutputCFunction output;
 @property BOOL errorsOnlyLogging;
 
+@property (assign, nonatomic) BOOL logResponseBodiesContainingBinaryData;
 @property (assign, nonatomic) NSUInteger maxResponseBodySizeToLogWithTruncationInVerboseMode;
 @property (assign, nonatomic) NSUInteger maxResponseBodySizeToLogWithoutTruncationInVerboseMode;
 @property (assign, nonatomic) NSUInteger responseBodySymbolsToLogWithTruncationInVerboseMode;

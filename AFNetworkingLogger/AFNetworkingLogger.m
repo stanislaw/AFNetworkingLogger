@@ -52,6 +52,7 @@
     self.maxResponseBodySizeToLogWithoutTruncationInVerboseMode = 8192;
     self.maxResponseBodySizeToLogWithTruncationInVerboseMode = 1024 * 1024;
     self.responseBodySymbolsToLogWithTruncationInVerboseMode = 128;
+    self.logResponseBodiesContainingBinaryData = NO;
 
     return self;
 }
