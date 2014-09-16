@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AFNetworkingLogger'
-  s.version  = '0.0.14'
+  s.version  = '0.0.15'
   s.license  = 'MIT'
 
   s.summary  = 'AFNetworking plugin providing network logging for iOS / Mac OS X applications'

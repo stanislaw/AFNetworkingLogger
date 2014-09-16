@@ -378,7 +378,7 @@
                 }
 
                 else {
-                    responseBodyString = [NSString stringWithFormat:@"Response contains non-UTF8 data and is not displayed"];
+                    responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data and is not displayed"];
                 }
 
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
@@ -401,7 +401,7 @@
                 }
 
                 else {
-                    responseBodyString = [NSString stringWithFormat:@"Response contains non-UTF8 data and is not displayed"];
+                    responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data and is not displayed"];
                 }
 
                 responseBodyString = [responseBodyString stringByAppendingString:responseDataString];
