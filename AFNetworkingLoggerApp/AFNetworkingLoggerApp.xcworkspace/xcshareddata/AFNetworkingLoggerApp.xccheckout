@@ -10,29 +10,29 @@
 	<string>AFNetworkingLoggerApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>82899B64-AB13-4F85-AB3E-5A7808059E4D</key>
+		<key>A8FA444DB706ABB611662DF02CC0032C2C966B95</key>
 		<string>ssh://github.com/stanislaw/AFNetworkingLogger.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>AFNetworkingLoggerApp/AFNetworkingLoggerApp.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>82899B64-AB13-4F85-AB3E-5A7808059E4D</key>
+		<key>A8FA444DB706ABB611662DF02CC0032C2C966B95</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/stanislaw/AFNetworkingLogger.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>82899B64-AB13-4F85-AB3E-5A7808059E4D</string>
+	<string>A8FA444DB706ABB611662DF02CC0032C2C966B95</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>82899B64-AB13-4F85-AB3E-5A7808059E4D</string>
+			<string>A8FA444DB706ABB611662DF02CC0032C2C966B95</string>
 			<key>IDESourceControlWCCName</key>
 			<string>AFNetworkingLogger</string>
 		</dict>

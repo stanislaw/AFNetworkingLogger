@@ -359,12 +359,13 @@
 
         NSString *responseBodyString = [paddingString copy];
 
-        if (operation.responseData.length == 0) {
+        NSUInteger responseDataLength = operation.responseData.length;
+
+        if (responseDataLength == 0) {
             responseBodyString = [responseBodyString stringByAppendingString:@"No response body."];
         }
 
-        else if (0 < operation.responseData.length &&
-                 operation.responseData.length <= ([AFNetworkingLogger sharedLogger].maxResponseBodySizeToLogWithoutTruncationInVerboseMode)) {
+        else if (0 < responseDataLength && responseDataLength <= ([AFNetworkingLogger sharedLogger].maxResponseBodySizeToLogWithoutTruncationInVerboseMode)) {
 
             NSString *responseDataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
@@ -385,11 +386,19 @@
             }
         }
 
-        else if (operation.responseData.length <= ([AFNetworkingLogger sharedLogger].maxResponseBodySizeToLogWithTruncationInVerboseMode)) {
+        else if (responseDataLength <= ([AFNetworkingLogger sharedLogger].maxResponseBodySizeToLogWithTruncationInVerboseMode)) {
+
             NSUInteger N = [AFNetworkingLogger sharedLogger].responseBodySymbolsToLogWithTruncationInVerboseMode;
 
-            NSData *firstNBytesOfResponseData = [responseData subdataWithRange:NSMakeRange(0, N)];
-            NSString *responseDataString = [[NSString alloc] initWithData:firstNBytesOfResponseData encoding:NSUTF8StringEncoding];
+            NSData *truncatedResponseData;
+
+            if (N < responseDataLength) {
+                truncatedResponseData = [responseData subdataWithRange:NSMakeRange(0, N)];
+            } else {
+                truncatedResponseData = responseData;
+            }
+
+            NSString *responseDataString = [[NSString alloc] initWithData:truncatedResponseData encoding:NSUTF8StringEncoding];
 
             if (responseDataString) {
                 responseBodyString = [responseBodyString stringByAppendingString:[NSString stringWithFormat:@"%@ ...TRUNCATED...", responseDataString]];
@@ -397,7 +406,7 @@
 
             else {
                 if ([AFNetworkingLogger sharedLogger].logResponseBodiesContainingBinaryData) {
-                    responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", firstNBytesOfResponseData.description];
+                    responseDataString = [NSString stringWithFormat:@"Response contains non-UTF8 data: %@ ...TRUNCATED...", truncatedResponseData.description];
                 }
 
                 else {
