@@ -7,12 +7,32 @@
 //
 
 #import "AppDelegate.h"
+#import <AFNetworking/AFNetworking.h>
+#import "AFNetworkingLogger.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+
+    [AFNetworkingLogger sharedLogger].level = AFNetworkingLoggerLevelVerbose;
+    [[AFNetworkingLogger sharedLogger] startLogging];
+
+    __block BOOL flag = NO;
+
+    NSURL *url = [[NSURL alloc] initWithString:@"https://www.google.com.ua/search?q=W+A+Mozart&ie=utf-8&oe=utf-8&rls=org.mozilla:en-US:official&client=firefox-a&channel=fflb&gws_rd=cr&ei=Z_9DUubbM8rAhAent4DIBg"];
+
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        flag = YES;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        abort();
+    }];
+
+    [requestOperation start];
+
     return YES;
 }
 							
