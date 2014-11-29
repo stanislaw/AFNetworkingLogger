@@ -21,7 +21,11 @@
     NSUInteger HTTPHeadersSize = 0;
 
     if (HTTPHeaders) {
-        NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        NSData *HTTPHeadersData = [NSPropertyListSerialization dataWithPropertyList:HTTPHeaders
+                                                                             format:NSPropertyListBinaryFormat_v1_0
+                                                                            options:0
+                                                                              error:NULL];
+
         HTTPHeadersSize = HTTPHeadersData.length;
     }
 
@@ -48,7 +52,10 @@
     NSUInteger HTTPHeadersSize = 0;
 
     if (HTTPHeaders) {
-        NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        NSData *HTTPHeadersData = [NSPropertyListSerialization dataWithPropertyList:HTTPHeaders
+                                                                             format:NSPropertyListBinaryFormat_v1_0
+                                                                            options:0
+                                                                              error:NULL];
         HTTPHeadersSize = HTTPHeadersData.length;
     }
 
@@ -99,8 +106,11 @@
         NSUInteger HTTPHeadersDataSize;
 
         if (HTTPHeaders && HTTPHeaders.count > 0) {
-            NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
-                                                                             format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+            NSData *HTTPHeadersData = [NSPropertyListSerialization dataWithPropertyList:HTTPHeaders
+                                                                                 format:NSPropertyListBinaryFormat_v1_0
+                                                                                options:0
+                                                                                  error:NULL];
+
             HTTPHeadersDataSize = HTTPHeadersData.length;
         } else {
             HTTPHeadersDataSize = 0;
@@ -252,8 +262,10 @@
 
         NSData *responseData = operation.responseData;
         NSDictionary *HTTPHeaders = operation.response.allHeaderFields;
-        NSData *HTTPHeadersData = [NSPropertyListSerialization dataFromPropertyList:HTTPHeaders
-                                                                             format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        NSData *HTTPHeadersData = [NSPropertyListSerialization dataWithPropertyList:HTTPHeaders
+                                                                             format:NSPropertyListBinaryFormat_v1_0
+                                                                            options:0
+                                                                              error:NULL];
 
 #pragma mark Paddings
 
